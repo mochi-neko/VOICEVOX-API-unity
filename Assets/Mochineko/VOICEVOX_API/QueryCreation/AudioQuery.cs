@@ -75,7 +75,13 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
         }
         
         public string ToJson()
-            => JsonConvert.SerializeObject(this, Formatting.Indented);
+            => JsonConvert.SerializeObject(
+                this,
+                Formatting.Indented,
+                new JsonSerializerSettings()
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                });
 
         public static AudioQuery? FromJson(string json)
             => JsonConvert.DeserializeObject<AudioQuery>(json);

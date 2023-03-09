@@ -61,11 +61,17 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
             }
             else
             {
-                // TODO: Handles error response
+                var errorResponse = APIError.FromJson(responseText);
+                if (errorResponse != null)
+                {
+                    throw new APIException(errorResponse);
+                }
+                else
+                {
+                    responseMessage.EnsureSuccessStatusCode();
                 
-                responseMessage.EnsureSuccessStatusCode();
-                
-                throw new Exception($"[VOICEVOX_API.QueryCreation] System error.");
+                    throw new Exception($"[VOICEVOX_API.QueryCreation] System error.");   
+                }
             }
         }
         

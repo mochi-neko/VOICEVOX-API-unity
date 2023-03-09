@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,7 +48,7 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
                 throw new Exception($"[VOICEVOX_API.QueryCreation] Response JSON is null or empty.");
             }
 
-            if (responseMessage.IsSuccessStatusCode)
+            if (responseMessage.StatusCode == HttpStatusCode.OK)
             {
                 var audioQuery = AudioQuery.FromJson(responseText);
                 if (audioQuery != null)
@@ -59,19 +60,24 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
                     throw new Exception($"[VOICEVOX_API.QueryCreation] Response AudioQuery is null.");
                 }
             }
-            else
+            else if (responseMessage.StatusCode == HttpStatusCode.UnprocessableEntity)
             {
                 var errorResponse = APIError.FromJson(responseText);
                 if (errorResponse != null)
                 {
+                    // Handle API error
                     throw new APIException(errorResponse);
                 }
                 else
                 {
-                    responseMessage.EnsureSuccessStatusCode();
-                
-                    throw new Exception($"[VOICEVOX_API.QueryCreation] System error.");   
+                    throw new Exception($"[VOICEVOX_API.QueryCreation] Error response JSON is null.");
                 }
+            }
+            else // Undefined errors
+            {
+                responseMessage.EnsureSuccessStatusCode();
+                
+                throw new Exception($"[VOICEVOX_API.QueryCreation] System error.");
             }
         }
         
@@ -107,7 +113,7 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
                 throw new Exception($"[VOICEVOX_API.QueryCreation] Response JSON is null or empty.");
             }
 
-            if (responseMessage.IsSuccessStatusCode)
+            if (responseMessage.StatusCode == HttpStatusCode.OK)
             {
                 var audioQuery = AudioQuery.FromJson(responseText);
                 if (audioQuery != null)
@@ -119,10 +125,21 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
                     throw new Exception($"[VOICEVOX_API.QueryCreation] Response AudioQuery is null.");
                 }
             }
-            else
+            else if (responseMessage.StatusCode == HttpStatusCode.UnprocessableEntity)
             {
-                // TODO: Handles error response
-                
+                var errorResponse = APIError.FromJson(responseText);
+                if (errorResponse != null)
+                {
+                    // Handle API error
+                    throw new APIException(errorResponse);
+                }
+                else
+                {
+                    throw new Exception($"[VOICEVOX_API.QueryCreation] Error response JSON is null.");
+                }
+            }
+            else // Undefined errors
+            {
                 responseMessage.EnsureSuccessStatusCode();
                 
                 throw new Exception($"[VOICEVOX_API.QueryCreation] System error.");

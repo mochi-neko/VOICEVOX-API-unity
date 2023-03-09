@@ -26,6 +26,8 @@ namespace Mochineko.VOICEVOX_API.Synthesis
             string? coreVersion,
             CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+            
             var queryParameters = new List<(string key, string value)>();
             queryParameters.Add(("speaker", speaker.ToString()));
             if (enableInterrogativeUpspeak != null)
@@ -100,6 +102,8 @@ namespace Mochineko.VOICEVOX_API.Synthesis
             string? coreVersion,
             CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+            
             var queryParameters = new List<(string key, string value)>();
             queryParameters.Add(("speaker", speaker.ToString()));
             if (coreVersion != null)

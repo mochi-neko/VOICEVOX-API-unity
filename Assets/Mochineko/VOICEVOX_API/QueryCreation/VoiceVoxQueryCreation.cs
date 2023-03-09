@@ -22,6 +22,8 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
             string? coreVersion,
             CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+            
             var queryParameters = new List<(string key, string value)>();
             queryParameters.Add(("text", text));
             queryParameters.Add(("speaker", speaker.ToString()));
@@ -87,6 +89,8 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
             string? coreVersion,
             CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+            
             var queryParameters = new List<(string key, string value)>();
             queryParameters.Add(("text", text));
             queryParameters.Add(("preset_id", presetId.ToString()));

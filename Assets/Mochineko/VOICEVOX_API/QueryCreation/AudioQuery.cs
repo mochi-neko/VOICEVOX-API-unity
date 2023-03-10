@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace Mochineko.VOICEVOX_API.QueryCreation
 {
+    /// <summary>
+    /// Audio query created from text and used to synthesis.
+    /// </summary>
     [JsonObject]
     public sealed class AudioQuery
     {

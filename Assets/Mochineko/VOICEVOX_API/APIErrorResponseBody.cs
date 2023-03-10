@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Mochineko.VOICEVOX_API
 {
     [JsonObject]
-    internal sealed class APIError
+    internal sealed class APIErrorResponseBody
     {
         [JsonProperty("detail"), JsonRequired] 
         public ValidationError[] Detail { get; private set; }
@@ -31,7 +31,7 @@ namespace Mochineko.VOICEVOX_API
                     NullValueHandling = NullValueHandling.Ignore
                 });
 
-        public static APIError? FromJson(string json)
-            => JsonConvert.DeserializeObject<APIError>(json);
+        public static APIErrorResponseBody? FromJson(string json)
+            => JsonConvert.DeserializeObject<APIErrorResponseBody>(json);
     }
 }

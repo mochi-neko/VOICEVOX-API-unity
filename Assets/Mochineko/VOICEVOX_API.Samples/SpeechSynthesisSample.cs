@@ -133,6 +133,7 @@ namespace Mochineko.VOICEVOX_API.Samples
 
             await UniTask.SwitchToMainThread(cancellationToken);
             
+            // Play AudioClip.
             audioSource.clip = audioClip;
             audioSource.Play();
         }

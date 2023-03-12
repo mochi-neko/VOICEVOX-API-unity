@@ -4,7 +4,7 @@ Binds [VOICEVOX](https://github.com/VOICEVOX/voicevox) text to speech [API](http
 
 See also [official page](https://voicevox.hiroshiba.jp/).
 
-Support version is `0.14.4`.
+Support version is `0.14.3`.
 
 ## How to import by UnityPackageManager
 

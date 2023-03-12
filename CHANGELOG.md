@@ -7,4 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.0] - 2023-03-XX
+### Added
+
+- All VOICEVOX API implementations.
+
+## [0.1.0] - 2023-03-12
+
+### Added
+
+- Implement query creation API.
+- Implement a few of synthesis API.
+- Make a sample.

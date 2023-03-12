@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace Mochineko.VOICEVOX_API
 {
+    /// <summary>
+    /// NOTICE: Does not respond error from VOICEVOX Core ver 0.14.3.
+    /// </summary>
     [JsonObject]
     internal sealed class APIErrorResponseBody
     {

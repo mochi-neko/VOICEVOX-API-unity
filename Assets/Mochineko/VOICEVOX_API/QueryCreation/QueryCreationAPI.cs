@@ -88,23 +88,17 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
                     throw new Exception($"[VOICEVOX_API.QueryCreation] Response AudioQuery is null.");
                 }
             }
-            // API error
-            else if (responseMessage.StatusCode == HttpStatusCode.UnprocessableEntity)
-            {
-                var errorResponse = APIErrorResponseBody.FromJson(responseText);
-                if (errorResponse != null)
-                {
-                    throw new APIException(errorResponse);
-                }
-                else
-                {
-                    throw new Exception($"[VOICEVOX_API.QueryCreation] Error response JSON is null.");
-                }
-            }
-            // Undefined errors
+            // Failed
             else
             {
-                responseMessage.EnsureSuccessStatusCode();
+                try
+                {
+                    responseMessage.EnsureSuccessStatusCode();
+                }
+                catch (Exception e)
+                {
+                    throw new APIException(responseText, responseMessage.StatusCode, e);
+                }
                 
                 throw new Exception($"[VOICEVOX_API.QueryCreation] System error.");
             }
@@ -177,23 +171,17 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
                     throw new Exception($"[VOICEVOX_API.QueryCreation] Response AudioQuery is null.");
                 }
             }
-            // API error
-            else if (responseMessage.StatusCode == HttpStatusCode.UnprocessableEntity)
-            {
-                var errorResponse = APIErrorResponseBody.FromJson(responseText);
-                if (errorResponse != null)
-                {
-                    throw new APIException(errorResponse);
-                }
-                else
-                {
-                    throw new Exception($"[VOICEVOX_API.QueryCreation] Error response JSON is null.");
-                }
-            }
-            // Undefined errors
+            // Failed
             else
             {
-                responseMessage.EnsureSuccessStatusCode();
+                try
+                {
+                    responseMessage.EnsureSuccessStatusCode();
+                }
+                catch (Exception e)
+                {
+                    throw new APIException(responseText, responseMessage.StatusCode, e);
+                }
                 
                 throw new Exception($"[VOICEVOX_API.QueryCreation] System error.");
             }

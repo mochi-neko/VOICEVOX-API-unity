@@ -94,8 +94,8 @@ namespace Mochineko.VOICEVOX_API.Synthesis
                     throw new Exception($"[VOICEVOX_API.Synthesis] Response Stream is null.");
                 }
             }
-            // API error
-            else if (responseMessage.StatusCode == HttpStatusCode.UnprocessableEntity) // Error
+            // Failed
+            else
             {
                 var responseText = await responseMessage.Content.ReadAsStringAsync();
                 if (responseText == null)
@@ -103,20 +103,14 @@ namespace Mochineko.VOICEVOX_API.Synthesis
                     throw new Exception($"[VOICEVOX_API.Synthesis] Error response text is null.");
                 }
 
-                var errorResponse = APIErrorResponseBody.FromJson(responseText);
-                if (errorResponse != null)
+                try
                 {
-                    throw new APIException(errorResponse);
+                    responseMessage.EnsureSuccessStatusCode();
                 }
-                else
+                catch (Exception e)
                 {
-                    throw new Exception($"[VOICEVOX_API.Synthesis] Error response JSON is null.");
+                    throw new APIException(responseText, responseMessage.StatusCode, e);
                 }
-            }
-            // Undefined errors
-            else
-            {
-                responseMessage.EnsureSuccessStatusCode();
 
                 throw new Exception($"[VOICEVOX_API.Synthesis] System error.");
             }
@@ -186,8 +180,8 @@ namespace Mochineko.VOICEVOX_API.Synthesis
                     throw new Exception($"[VOICEVOX_API.Synthesis] Response Stream is null.");
                 }
             }
-            // API error
-            else if (responseMessage.StatusCode == HttpStatusCode.UnprocessableEntity)
+            // Failed
+            else
             {
                 var responseText = await responseMessage.Content.ReadAsStringAsync();
                 if (responseText == null)
@@ -195,20 +189,14 @@ namespace Mochineko.VOICEVOX_API.Synthesis
                     throw new Exception($"[VOICEVOX_API.Synthesis] Error response text is null.");
                 }
 
-                var errorResponse = APIErrorResponseBody.FromJson(responseText);
-                if (errorResponse != null)
+                try
                 {
-                    throw new APIException(errorResponse);
+                    responseMessage.EnsureSuccessStatusCode();
                 }
-                else
+                catch (Exception e)
                 {
-                    throw new Exception($"[VOICEVOX_API.Synthesis] Error response JSON is null.");
+                    throw new APIException(responseText, responseMessage.StatusCode, e);
                 }
-            }
-            // Undefined errors
-            else
-            {
-                responseMessage.EnsureSuccessStatusCode();
 
                 throw new Exception($"[VOICEVOX_API.Synthesis] System error.");
             }

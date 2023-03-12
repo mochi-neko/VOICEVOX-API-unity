@@ -1,4 +1,7 @@
 #nullable enable
+using System;
+using System.Net;
+
 namespace Mochineko.VOICEVOX_API
 {
     /// <summary>
@@ -6,11 +9,14 @@ namespace Mochineko.VOICEVOX_API
     /// </summary>
     public sealed class APIException : System.Exception
     {
-        internal APIException(APIErrorResponseBody errorResponseBody)
-            : base(message: $"Location:{errorResponseBody.Detail[0].Location}, " +
-                            $"Message:{errorResponseBody.Detail[0].Message}, " +
-                            $"ErrorType:{errorResponseBody.Detail[0].ErrorType}.")
+        internal APIException(string response, HttpStatusCode statusCode, Exception innerException)
+            : base(
+                message: BuildMessage(response, statusCode),
+                innerException:innerException)
         {
         }
+
+        private static string BuildMessage(string response, HttpStatusCode statusCode)
+            => $"[VOICEVOX_API] ({(int)statusCode}:{statusCode}) {response}.";
     }
 }

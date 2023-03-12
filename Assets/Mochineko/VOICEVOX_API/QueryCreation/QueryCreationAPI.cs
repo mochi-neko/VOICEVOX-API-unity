@@ -31,7 +31,7 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Audio query from text</returns>
         /// <exception cref="Exception">System errors</exception>
-        /// <exception cref="APIException">VOICEBOX API errors</exception>
+        /// <exception cref="APIException">VOICEVOX API errors</exception>
         /// <exception cref="OperationCanceledException">Cancelled before operation</exception>
         /// <exception cref="HttpRequestException">Request errors</exception>
         /// <exception cref="TaskCanceledException">Cancelled by user or timeout</exception>
@@ -114,7 +114,7 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Audio query from text</returns>
         /// <exception cref="Exception">System errors</exception>
-        /// <exception cref="APIException">VOICEBOX API errors</exception>
+        /// <exception cref="APIException">VOICEVOX API errors</exception>
         /// <exception cref="OperationCanceledException">Cancelled before operation</exception>
         /// <exception cref="HttpRequestException">Request errors</exception>
         /// <exception cref="TaskCanceledException">Cancelled by user or timeout</exception>

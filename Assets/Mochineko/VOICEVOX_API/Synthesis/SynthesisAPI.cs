@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 namespace Mochineko.VOICEVOX_API.Synthesis
 {
     /// <summary>
-    /// VOICEVOX synthesis API.
+    /// VOICEVOX speech synthesis API.
     /// See https://voicevox.github.io/voicevox_engine/api/#tag/%E9%9F%B3%E5%A3%B0%E5%90%88%E6%88%90
     /// </summary>
     public static class SynthesisAPI
@@ -25,7 +25,7 @@ namespace Mochineko.VOICEVOX_API.Synthesis
             => HttpClientPool.PooledClient;
 
         /// <summary>
-        /// Synthesis speech from audio query.
+        /// Synthesizes speech from audio query.
         /// See https://voicevox.github.io/voicevox_engine/api/#tag/%E9%9F%B3%E5%A3%B0%E5%90%88%E6%88%90/operation/synthesis_synthesis_post
         /// </summary>
         /// <param name="query">[Required] Audio query input</param>
@@ -35,12 +35,12 @@ namespace Mochineko.VOICEVOX_API.Synthesis
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Audio stream as WAV format data</returns>
         /// <exception cref="Exception">System errors</exception>
-        /// <exception cref="APIException">VOICEBOX API errors</exception>
+        /// <exception cref="APIException">VOICEVOX API errors</exception>
         /// <exception cref="OperationCanceledException">Cancelled before operation</exception>
         /// <exception cref="HttpRequestException">Request errors</exception>
         /// <exception cref="TaskCanceledException">Cancelled by user or timeout</exception>
         /// <exception cref="JsonSerializationException">JSON error</exception>
-        public static async Task<Stream> SynthesisAsync(
+        public static async Task<Stream> SynthesizeAsync(
             AudioQuery query,
             int speaker,
             bool? enableInterrogativeUpspeak,
@@ -117,7 +117,7 @@ namespace Mochineko.VOICEVOX_API.Synthesis
         }
 
         /// <summary>
-        /// Synthesis speech from audio query with cancellable API.
+        /// Synthesizes speech from audio query with cancellable API.
         /// See https://voicevox.github.io/voicevox_engine/api/#tag/%E9%9F%B3%E5%A3%B0%E5%90%88%E6%88%90/operation/cancellable_synthesis_cancellable_synthesis_post
         /// </summary>
         /// <param name="query">[Required] Audio query input</param>
@@ -126,12 +126,12 @@ namespace Mochineko.VOICEVOX_API.Synthesis
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Audio stream as WAV format data</returns>
         /// <exception cref="Exception">System errors</exception>
-        /// <exception cref="APIException">VOICEBOX API errors</exception>
+        /// <exception cref="APIException">VOICEVOX API errors</exception>
         /// <exception cref="OperationCanceledException">Cancelled before operation</exception>
         /// <exception cref="HttpRequestException">Request errors</exception>
         /// <exception cref="TaskCanceledException">Cancelled by user or timeout</exception>
         /// <exception cref="JsonSerializationException">JSON error</exception>
-        public static async Task<Stream> CancellableSynthesisAsync(
+        public static async Task<Stream> CancellableSynthesizeAsync(
             AudioQuery query,
             int speaker,
             string? coreVersion,

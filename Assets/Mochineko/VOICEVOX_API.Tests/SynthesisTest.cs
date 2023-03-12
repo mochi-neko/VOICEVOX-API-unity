@@ -22,7 +22,7 @@ namespace Mochineko.VOICEVOX_API.Tests
                 coreVersion: null,
                 cancellationToken: CancellationToken.None);
 
-            await using var stream = await SynthesisAPI.SynthesisAsync(
+            await using var stream = await SynthesisAPI.SynthesizeAsync(
                 query: query,
                 speaker: 0,
                 enableInterrogativeUpspeak: null,
@@ -45,7 +45,7 @@ namespace Mochineko.VOICEVOX_API.Tests
                 coreVersion: null,
                 cancellationToken: CancellationToken.None);
 
-            await using var stream = await SynthesisAPI.CancellableSynthesisAsync(
+            await using var stream = await SynthesisAPI.CancellableSynthesizeAsync(
                 query: query,
                 speaker: 0,
                 coreVersion: null,

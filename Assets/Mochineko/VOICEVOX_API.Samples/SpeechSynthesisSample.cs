@@ -71,7 +71,7 @@ namespace Mochineko.VOICEVOX_API.Samples
             Stream stream;
             try
             {
-                stream = await SynthesisAPI.SynthesisAsync(
+                stream = await SynthesisAPI.SynthesizeAsync(
                     query: query,
                     speaker: speakerID,
                     enableInterrogativeUpspeak: null,

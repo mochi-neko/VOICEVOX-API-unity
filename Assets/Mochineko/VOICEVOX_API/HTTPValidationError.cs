@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using Newtonsoft.Json;
 
 namespace Mochineko.VOICEVOX_API
@@ -7,22 +8,22 @@ namespace Mochineko.VOICEVOX_API
     /// NOTICE: Does not respond error from VOICEVOX Core ver 0.14.3.
     /// </summary>
     [JsonObject]
-    internal sealed class APIErrorResponseBody
+    internal sealed class HTTPValidationError
     {
-        [JsonProperty("detail"), JsonRequired] 
-        public ValidationError[] Detail { get; private set; }
+        [JsonProperty("detail"), JsonRequired]
+        public ValidationError[] Detail { get; private set; } = Array.Empty<ValidationError>();
 
         [JsonObject]
         public sealed class ValidationError
         {
-            [JsonProperty("loc"), JsonRequired] 
-            public string[] Location { get; private set; }
+            [JsonProperty("loc"), JsonRequired]
+            public string[] Location { get; private set; } = Array.Empty<string>();
 
             [JsonProperty("msg"), JsonRequired] 
-            public string Message { get; private set; }
+            public string Message { get; private set; } = string.Empty;
 
             [JsonProperty("type"), JsonRequired] 
-            public string ErrorType { get; private set; }
+            public string ErrorType { get; private set; } = string.Empty;
         }
 
         public string ToJson()
@@ -34,7 +35,7 @@ namespace Mochineko.VOICEVOX_API
                     NullValueHandling = NullValueHandling.Ignore
                 });
 
-        public static APIErrorResponseBody? FromJson(string json)
-            => JsonConvert.DeserializeObject<APIErrorResponseBody>(json);
+        public static HTTPValidationError? FromJson(string json)
+            => JsonConvert.DeserializeObject<HTTPValidationError>(json);
     }
 }

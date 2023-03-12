@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using Newtonsoft.Json;
 
 namespace Mochineko.VOICEVOX_API.QueryCreation
@@ -10,7 +11,7 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
     public sealed class AudioQuery
     {
         [JsonProperty("accent_phrases"), JsonRequired]
-        public AccentPhase[] AccentPhases { get; private set; }
+        public AccentPhase[] AccentPhases { get; private set; } = Array.Empty<AccentPhase>();
 
         [JsonProperty("speedScale"), JsonRequired]
         public float SpeedScale { get; private set; }
@@ -51,14 +52,20 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
             [JsonProperty("pause_mora")] 
             public Mora? PauseMora { get; private set; }
 
-            [JsonProperty("is_interrogative")] // false
+            [JsonProperty("is_interrogative")] // Defaults to false
             public bool? IsInterrogative { get; private set; }
+            
+            public AccentPhase(Mora[] moras, int accent)
+            {
+                Moras = moras;
+                Accent = accent;
+            }
 
             [JsonObject]
             public sealed class Mora
             {
-                [JsonProperty("text"), JsonRequired] 
-                public string Text { get; private set; }
+                [JsonProperty("text"), JsonRequired]
+                public string Text { get; private set; } = string.Empty;
 
                 [JsonProperty("consonant")] 
                 public string? Consonant { get; private set; }
@@ -67,7 +74,7 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
                 public float? ConsonantLength { get; private set; }
 
                 [JsonProperty("vowel"), JsonRequired]
-                public string Vowel { get; private set; }
+                public string Vowel { get; private set; } = string.Empty;
 
                 [JsonProperty("vowel_length"), JsonRequired]
                 public float VowelLength { get; private set; }

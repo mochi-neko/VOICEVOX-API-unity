@@ -2,19 +2,28 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using Mochineko.SimpleAudioCodec;
-using Mochineko.VOICEVOX_API.QueryCreation;
-using Mochineko.VOICEVOX_API.Synthesis;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Object = UnityEngine.Object;
+using Mochineko.VOICEVOX_API.QueryCreation;
+using Mochineko.VOICEVOX_API.Synthesis;
+using Mochineko.SimpleAudioCodec;
 
 namespace Mochineko.VOICEVOX_API.Samples
 {
     public class SpeechSynthesisSample : MonoBehaviour
     {
+        /// <summary>
+        /// A text you want to synthesize.
+        /// </summary>
         [SerializeField] private string text = null;
+        /// <summary>
+        /// Speaker ID of VOICEVOX to speech.
+        /// </summary>
         [SerializeField] private int speakerID;
+        /// <summary>
+        /// Audio source to play.
+        /// </summary>
         [SerializeField] private AudioSource audioSource = null;
 
         private AudioClip audioClip;
@@ -33,6 +42,7 @@ namespace Mochineko.VOICEVOX_API.Samples
             }
         }
 
+        // TODO: Queues each request and playing audio.
         [ContextMenu("Synthesis")]
         public async Task SynthesisAsync()
         {
@@ -44,16 +54,17 @@ namespace Mochineko.VOICEVOX_API.Samples
             audioSource.Stop();
 
             var cancellationToken = this.GetCancellationTokenOnDestroy();
-            var path = Path.Combine(
-                Application.dataPath,
-                "Mochineko/VOICEVOX_API.Samples",
-                $"synthesis_{DateTime.Now:yyyy_MM_dd_hh_mm_ss}.wav");
+            // var path = Path.Combine(
+            //     Application.dataPath,
+            //     "Mochineko/VOICEVOX_API.Samples",
+            //     $"synthesis_{DateTime.Now:yyyy_MM_dd_hh_mm_ss}.wav");
 
             await UniTask.SwitchToThreadPool();
 
             AudioQuery query;
             try
             {
+                // Create AudioQuery from text by VOICEVOX query creation API.
                 query = await QueryCreationAPI.CreateQueryAsync(
                     text: text,
                     speaker: 1,
@@ -71,6 +82,7 @@ namespace Mochineko.VOICEVOX_API.Samples
             Stream stream;
             try
             {
+                // Synthesize speech from AudioQuery by VOICEVOX synthesis API.
                 stream = await SynthesisAPI.SynthesizeAsync(
                     query: query,
                     speaker: speakerID,
@@ -97,6 +109,7 @@ namespace Mochineko.VOICEVOX_API.Samples
 
             try
             {
+                // Decode WAV data to AudioClip by SimpleAudioCodec WAV decoder.
                 audioClip = await WaveDecoder.DecodeBlockByBlockAsync(
                     stream: stream,
                     fileName: "Synthesis.wav",
@@ -120,7 +133,6 @@ namespace Mochineko.VOICEVOX_API.Samples
 
             await UniTask.SwitchToMainThread(cancellationToken);
             
-            // TODO: Queueing audio clip.
             audioSource.clip = audioClip;
             audioSource.Play();
         }

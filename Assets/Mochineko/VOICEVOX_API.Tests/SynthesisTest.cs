@@ -1,9 +1,9 @@
 #nullable enable
 using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Mochineko.VOICEVOX_API.QueryCreation;
 using Mochineko.VOICEVOX_API.Synthesis;
+using FluentAssertions;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 
@@ -36,7 +36,7 @@ namespace Mochineko.VOICEVOX_API.Tests
         
         [Test]
         [RequiresPlayMode(false)]
-        [Ignore("Failed to call")]
+        [Ignore("Experimental feature")]
         public async Task CancellableSynthesis()
         {
             var query = await QueryCreationAPI.CreateQueryAsync(

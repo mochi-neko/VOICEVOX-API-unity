@@ -1,8 +1,8 @@
 #nullable enable
 using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Mochineko.VOICEVOX_API.QueryCreation;
+using FluentAssertions;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 

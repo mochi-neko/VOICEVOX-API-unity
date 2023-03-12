@@ -46,11 +46,11 @@ If you have already used Newtonsoft.Json on your project, remove dependency:`"co
 1. Launch your VOICEVOX server or application.
 2. If you change VOICEVOX server address from default, you have to set `VoiceVoxBaseURL.BaseURL`.
 3. Input text to synthesis speech.
-4. Create `AudioQuery` from text by query creation API of VOICEVOX.
-5. Synthesize speech from `AudioQuery` by synthesis API of VOICEVOX.
+4. Create `AudioQuery` from text by `QueryCreationAPI`.
+5. Synthesize speech from `AudioQuery` by `SynthesisAPI`.
 6. Decode synthesized WAV file and play on Unity as you like.
   - You can select how to decode WAV file on your project.
-  - In this sample, I use (simple-audio-codec-unity)[https://github.com/mochi-neko/simple-audio-codec-unity] I wrote.
+  - In this sample, I use [simple-audio-codec-unity](https://github.com/mochi-neko/simple-audio-codec-unity) I wrote.
 
 An essential sample code with [UniTask](https://github.com/Cysharp/UniTask) is as follows:
 

@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - All VOICEVOX API implementations.
+- 
+## [0.2.0] - 2023-03-27
+
+### Changed
+
+- Improve error handling of APIs by [Relent](https://github.com/mochi-neko/Relent).
 
 ## [0.1.0] - 2023-03-12
 

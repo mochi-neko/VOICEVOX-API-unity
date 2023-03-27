@@ -30,8 +30,12 @@ Add dependencies:
 ```json
 {
   "dependencies": {
-    "com.mochineko.voicevox-api": "https://github.com/mochi-neko/VOICEVOX-API-unity.git?path=/Assets/Mochineko/VOICEVOX_API#0.1.0",
+    "com.mochineko.voicevox-api": "https://github.com/mochi-neko/VOICEVOX-API-unity.git?path=/Assets/Mochineko/VOICEVOX_API#0.2.0",
+    "com.mochineko.relent.result": "https://github.com/mochi-neko/Relent.git?path=/Assets/Mochineko/Relent/Result#0.1.1",
+    "com.mochineko.relent.uncertain-result": "https://github.com/mochi-neko/Relent.git?path=/Assets/Mochineko/Relent/UncertainResult#0.1.1",
+    "com.mochineko.relent.resilience": "https://github.com/mochi-neko/Relent.git?path=/Assets/Mochineko/Relent/Resilience#0.1.1",
     "com.unity.nuget.newtonsoft-json": "3.0.2",
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     ...
   }
 }
@@ -52,140 +56,8 @@ If you have already used Newtonsoft.Json on your project, remove dependency:`"co
   - You can select how to decode WAV file on your project.
   - In this sample, I use [simple-audio-codec-unity](https://github.com/mochi-neko/simple-audio-codec-unity) I wrote.
 
-An essential sample code with [UniTask](https://github.com/Cysharp/UniTask) is as follows:
-
-```cs
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.Assertions;
-using Object = UnityEngine.Object;
-using Mochineko.VOICEVOX_API;
-using Mochineko.VOICEVOX_API.QueryCreation;
-using Mochineko.VOICEVOX_API.Synthesis;
-using Mochineko.SimpleAudioCodec;
-
-namespace XXX
-{
-    public class SpeechSynthesisSample : MonoBehaviour
-    {
-        /// <summary>
-        /// A text you want to synthesize.
-        /// </summary>
-        [SerializeField] private string text = null;
-        /// <summary>
-        /// Speaker ID of VOICEVOX to speech.
-        /// </summary>
-        [SerializeField] private int speakerID;
-        /// <summary>
-        /// Audio source to play.
-        /// </summary>
-        [SerializeField] private AudioSource audioSource = null;
-
-        private AudioClip audioClip;
-
-        private void Awake()
-        {
-            Assert.IsNotNull(audioSource);
-        }
-
-        private void OnDestroy()
-        {
-            if (audioClip != null)
-            {
-                Object.Destroy(audioClip);
-                audioClip = null;
-            }
-        }
-
-        [ContextMenu("Synthesis")]
-        public async Task SynthesisAsync()
-        {
-            if (audioClip != null)
-            {
-                Object.Destroy(audioClip);
-                audioClip = null;
-            }
-            audioSource.Stop();
-
-            var cancellationToken = this.GetCancellationTokenOnDestroy();
-
-            await UniTask.SwitchToThreadPool();
-
-            AudioQuery query;
-            try
-            {
-                // Create AudioQuery from text by VOICEVOX query creation API.
-                query = await QueryCreationAPI.CreateQueryAsync(
-                    text: text,
-                    speaker: 1,
-                    coreVersion: null,
-                    cancellationToken: cancellationToken);
-                
-                Debug.Log($"[VOICEVOX_API.Samples] Succeeded to create audio query:{query.ToJson()}.");
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-                return;
-            }
-
-            Stream stream;
-            try
-            {
-                // Synthesize speech from AudioQuery by VOICEVOX synthesis API.
-                stream = await SynthesisAPI.SynthesizeAsync(
-                    query: query,
-                    speaker: speakerID,
-                    enableInterrogativeUpspeak: null,
-                    coreVersion: null,
-                    cancellationToken: cancellationToken);
-                
-                Debug.Log($"[VOICEVOX_API.Samples] Succeeded to synthesis speech: {stream.Length}.");
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-                return;
-            }
-
-            try
-            {
-                // Decode WAV data to AudioClip by SimpleAudioCodec WAV decoder.
-                audioClip = await WaveDecoder.DecodeBlockByBlockAsync(
-                    stream: stream,
-                    fileName: "Synthesis.wav",
-                    cancellationToken: cancellationToken);
-                
-                Debug.Log($"[VOICEVOX_API.Samples] Succeeded to decode audio, " +
-                          $"samples:{audioClip.samples}, " +
-                          $"frequency:{audioClip.frequency}, " +
-                          $"channels:{audioClip.channels}, " +
-                          $"length:{audioClip.length}.");
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-                return;
-            }
-            finally
-            {
-                await stream.DisposeAsync();
-            }
-
-            await UniTask.SwitchToMainThread(cancellationToken);
-            
-            // Play AudioClip.
-            audioSource.clip = audioClip;
-            audioSource.Play();
-        }
-    }
-}
-```
-
-See also [Samples](https://github.com/mochi-neko/VOICEVOX-API-unity/tree/main/Assets/Mochineko/VOICEVOX_API.Samples).
+A sample code with [UniTask](https://github.com/Cysharp/UniTask) is
+ [this](https://github.com/mochi-neko/VOICEVOX-API-unity/tree/main/Assets/Mochineko/VOICEVOX_API.Samples/SpeechSynthesisSample.cs).
 
 ## Changelog
 

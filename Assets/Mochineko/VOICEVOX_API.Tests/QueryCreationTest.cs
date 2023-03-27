@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Mochineko.VOICEVOX_API.QueryCreation;
 using FluentAssertions;
+using Mochineko.Relent.UncertainResult;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 
@@ -15,26 +16,28 @@ namespace Mochineko.VOICEVOX_API.Tests
         [RequiresPlayMode(false)]
         public async Task CreateQuery()
         {
-            var query = await QueryCreationAPI.CreateQueryAsync(
+            var createQueryResult = await QueryCreationAPI.CreateQueryAsync(
+                HttpClientPool.PooledClient,
                 text: "テスト",
                 speaker: 0,
                 coreVersion: null,
                 CancellationToken.None);
 
-            query.Should().NotBeNull();
+            createQueryResult.Success.Should().BeTrue();
         }
         
         [Test]
         [RequiresPlayMode(false)]
         public async Task CreateQueryFromPreset()
         {
-            var query = await QueryCreationAPI.CreateQueryFromPresetAsync(
+            var createQueryResult = await QueryCreationAPI.CreateQueryFromPresetAsync(
+                HttpClientPool.PooledClient,
                 text: "テスト",
                 presetId: 0,
                 coreVersion: null,
                 CancellationToken.None);
 
-            query.Should().NotBeNull();
+            createQueryResult.Success.Should().BeTrue();
         }
     }
 }

@@ -1,9 +1,11 @@
 #nullable enable
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Mochineko.VOICEVOX_API.QueryCreation;
 using Mochineko.VOICEVOX_API.Synthesis;
 using FluentAssertions;
+using Mochineko.Relent.UncertainResult;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 
@@ -16,22 +18,30 @@ namespace Mochineko.VOICEVOX_API.Tests
         [RequiresPlayMode(false)]
         public async Task Synthesis()
         {
-            var query = await QueryCreationAPI.CreateQueryAsync(
+            var createQueryResult = await QueryCreationAPI.CreateQueryAsync(
+                HttpClientPool.PooledClient,
                 text: "テスト",
                 speaker: 0,
                 coreVersion: null,
-                cancellationToken: CancellationToken.None);
-
-            await using var stream = await SynthesisAPI.SynthesizeAsync(
-                query: query,
-                speaker: 0,
-                enableInterrogativeUpspeak: null,
-                coreVersion: null,
                 CancellationToken.None);
 
-            stream.Should().NotBeNull();
-            stream.CanRead.Should().BeTrue();
-            stream.Length.Should().NotBe(0);
+            if (createQueryResult is IUncertainSuccessResult<AudioQuery> success)
+            {
+                var synthesizeResult = await SynthesisAPI.SynthesizeAsync(
+                    HttpClientPool.PooledClient,
+                    audioQuery: success.Result,
+                    speaker: 0,
+                    enableInterrogativeUpspeak: null,
+                    coreVersion: null,
+                    CancellationToken.None);
+
+                synthesizeResult.Success.Should().BeTrue();
+                await using var _ = (synthesizeResult as IUncertainSuccessResult<Stream>)?.Result;
+            }
+            else
+            {
+                Assert.Fail();
+            }
         }
         
         [Test]
@@ -39,21 +49,29 @@ namespace Mochineko.VOICEVOX_API.Tests
         [Ignore("Experimental feature")]
         public async Task CancellableSynthesis()
         {
-            var query = await QueryCreationAPI.CreateQueryAsync(
+            var createQueryResult = await QueryCreationAPI.CreateQueryAsync(
+                HttpClientPool.PooledClient,
                 text: "テスト",
-                speaker: 0,
-                coreVersion: null,
-                cancellationToken: CancellationToken.None);
-
-            await using var stream = await SynthesisAPI.CancellableSynthesizeAsync(
-                query: query,
                 speaker: 0,
                 coreVersion: null,
                 CancellationToken.None);
 
-            stream.Should().NotBeNull();
-            stream.CanRead.Should().BeTrue();
-            stream.Length.Should().NotBe(0);
+            if (createQueryResult is IUncertainSuccessResult<AudioQuery> success)
+            {
+                var synthesizeResult = await SynthesisAPI.CancellableSynthesizeAsync(
+                    HttpClientPool.PooledClient,
+                    audioQuery: success.Result,
+                    speaker: 0,
+                    coreVersion: null,
+                    CancellationToken.None);
+
+                synthesizeResult.Success.Should().BeTrue();
+                await using var _ = (synthesizeResult as IUncertainSuccessResult<Stream>)?.Result;
+            }
+            else
+            {
+                Assert.Fail();
+            }
         }
     }
 }

@@ -83,17 +83,5 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
                 public float Pitch { get; private set; }
             }
         }
-        
-        public string ToJson()
-            => JsonConvert.SerializeObject(
-                this,
-                Formatting.Indented,
-                new JsonSerializerSettings()
-                {
-                    NullValueHandling = NullValueHandling.Ignore
-                });
-
-        public static AudioQuery? FromJson(string json)
-            => JsonConvert.DeserializeObject<AudioQuery>(json);
     }
 }

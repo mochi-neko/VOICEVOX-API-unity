@@ -10,7 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - All VOICEVOX API implementations.
-- 
+
+## [0.2.1] - 2023-03-28
+
+### Fixed
+
+- Fix degradations of the URL query path.
+
 ## [0.2.0] - 2023-03-27
 
 ### Changed

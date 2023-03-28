@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Mochineko.Relent.Result;
 using Mochineko.Relent.UncertainResult;
+using UnityEngine;
 
 namespace Mochineko.VOICEVOX_API.QueryCreation
 {
@@ -62,7 +63,9 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
             var queryPath = await query.ReadAsStringAsync();
 
             // Build URL with query parameters
-            var url = VoiceVoxBaseURL.BaseURL + AudioQueryEndPoint + queryPath;
+            var url = VoiceVoxBaseURL.BaseURL
+                      + AudioQueryEndPoint
+                      + "?" + queryPath;
 
             // Create request
             using var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
@@ -187,7 +190,9 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
             var queryPath = await query.ReadAsStringAsync();
 
             // Build URL with query parameters
-            var url = VoiceVoxBaseURL.BaseURL + AudioQueryFromPresetEndPoint + queryPath;
+            var url = VoiceVoxBaseURL.BaseURL
+                      + AudioQueryFromPresetEndPoint
+                      + "?" + queryPath;
 
             // Create request
             using var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);

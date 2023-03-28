@@ -11,6 +11,7 @@ using Object = UnityEngine.Object;
 using Mochineko.VOICEVOX_API.QueryCreation;
 using Mochineko.VOICEVOX_API.Synthesis;
 using Mochineko.SimpleAudioCodec;
+using Newtonsoft.Json;
 
 namespace Mochineko.VOICEVOX_API.Samples
 {
@@ -84,7 +85,7 @@ namespace Mochineko.VOICEVOX_API.Samples
             if (createQueryResult is IUncertainSuccessResult<AudioQuery> createQuerySuccess)
             {
                 audioQuery = createQuerySuccess.Result;
-                Debug.Log($"[VOICEVOX_API.Samples] Succeeded to create query from text:{text}.");
+                Debug.Log($"[VOICEVOX_API.Samples] Succeeded to create query from text:{text} -> {JsonConvert.SerializeObject(audioQuery)}.");
             }
             else if (createQueryResult is IUncertainRetryableResult<AudioQuery> createQueryRetryable)
             {
@@ -94,7 +95,7 @@ namespace Mochineko.VOICEVOX_API.Samples
             }
             else if (createQueryResult is IUncertainFailureResult<AudioQuery> createQueryFailure)
             {
-                Debug.LogError($"[VOICEVOX_API.Samples] Failed to create query because -> {createQueryFailure}.");
+                Debug.LogError($"[VOICEVOX_API.Samples] Failed to create query because -> {createQueryFailure.Message}.");
                 return;
             }
             else
@@ -116,7 +117,6 @@ namespace Mochineko.VOICEVOX_API.Samples
             if (synthesisResult is IUncertainSuccessResult<Stream> synthesisSuccess)
             {
                 stream = synthesisSuccess.Result;
-                await using var _ = stream;
                 Debug.Log($"[VOICEVOX_API.Samples] Succeeded to synthesis speech from text:{text}.");
             }
             else if (synthesisResult is IUncertainRetryableResult<Stream> synthesisRetryable)

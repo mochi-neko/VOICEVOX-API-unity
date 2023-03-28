@@ -66,7 +66,7 @@ namespace Mochineko.VOICEVOX_API.Synthesis
             // Build URL
             var url = VoiceVoxBaseURL.BaseURL
                       + SynthesisEndPoint
-                      + queryPath;
+                      + "?" + queryPath;
 
             string audioQueryJson;
             var serializeResult = JsonSerializer.Serialize(audioQuery);
@@ -196,7 +196,7 @@ namespace Mochineko.VOICEVOX_API.Synthesis
             // Build URL
             var url = VoiceVoxBaseURL.BaseURL
                       + CancellableSynthesisEndPoint
-                      + queryPath;
+                      + "?" + queryPath;
 
             string audioQueryJson;
             var serializeResult = JsonSerializer.Serialize(audioQuery);

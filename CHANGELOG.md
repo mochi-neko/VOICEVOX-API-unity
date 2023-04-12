@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update [Relent](https://github.com/mochi-neko/Relent) version to 0.2.0.
+- Change base URL from `http://localhost:50021` to `http://127.0.0.1:50021`.
 
 ## [0.2.1] - 2023-03-28
 

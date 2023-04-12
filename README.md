@@ -60,7 +60,7 @@ A sample code with [UniTask](https://github.com/Cysharp/UniTask) is
 
 ## Changelog
 
-See [CHANGELOG](https://github.com/mochi-neko/VOICEVOX-API-unity/blob/main/CHANGELOG.md)
+See [CHANGELOG](https://github.com/mochi-neko/VOICEVOX-API-unity/blob/main/CHANGELOG.md).
 
 ## 3rd Party Notices
 
@@ -68,4 +68,4 @@ See [NOTICE](https://github.com/mochi-neko/VOICEVOX-API-unity/blob/main/NOTICE.m
 
 ## License
 
-[MIT License](https://github.com/mochi-neko/VOICEVOX-API-unity/blob/main/LICENSE)
+Licensed under the [MIT](https://github.com/mochi-neko/VOICEVOX-API-unity/blob/main/LICENSE) license.

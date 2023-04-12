@@ -21,6 +21,16 @@
       "dependencies": {},
       "hash": "5fd87387912763429e4c8008157ed6a654c3093c"
     },
+    "com.mochineko.relent.extensions.newtonsoft-json": {
+      "version": "https://github.com/mochi-neko/Relent.git?path=/Assets/Mochineko/Relent.Extensions/NewtonsofJson#0.2.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.mochineko.relent": "https://github.com/mochi-neko/Relent.git?path=/Assets/Mochineko/Relent#0.2.0",
+        "com.unity.nuget.newtonsoft-json": "3.0.2"
+      },
+      "hash": "5fd87387912763429e4c8008157ed6a654c3093c"
+    },
     "com.mochineko.simple-audio-codec-unity": {
       "version": "https://github.com/mochi-neko/simple-audio-codec-unity.git?path=/Assets/Mochineko/SimpleAudioCodec#0.1.2",
       "depth": 0,

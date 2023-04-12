@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using Mochineko.Relent.Extensions.NewtonsoftJson;
 using Mochineko.Relent.Result;
 using Mochineko.Relent.UncertainResult;
 using UnityEngine;
@@ -41,13 +42,13 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
         {
             if (string.IsNullOrEmpty(text))
             {
-                return UncertainResults.Fail<AudioQuery>(
+                return UncertainResults.FailWithTrace<AudioQuery>(
                     "Failed because text is null or empty.");
             }
 
             if (cancellationToken.IsCancellationRequested)
             {
-                return UncertainResults.Retry<AudioQuery>(
+                return UncertainResults.RetryWithTrace<AudioQuery>(
                     "Retryable because cancellation has been already requested.");
             }
             
@@ -76,7 +77,7 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
                 using var responseMessage = await httpClient.SendAsync(requestMessage, cancellationToken);
                 if (responseMessage == null)
                 {
-                    return UncertainResults.Fail<AudioQuery>(
+                    return UncertainResults.FailWithTrace<AudioQuery>(
                         $"Failed because{nameof(HttpResponseMessage)} is null.");
                 }
                 
@@ -84,21 +85,21 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
                 var responseText = await responseMessage.Content.ReadAsStringAsync();
                 if (string.IsNullOrEmpty(responseText))
                 {
-                    return UncertainResults.Fail<AudioQuery>(
+                    return UncertainResults.FailWithTrace<AudioQuery>(
                         $"Failed because response string is null or empty.");
                 }
 
                 // Succeeded
                 if (responseMessage.StatusCode == HttpStatusCode.OK)
                 {
-                    var deserializeResult = JsonSerializer.Deserialize<AudioQuery>(responseText);
+                    var deserializeResult = RelentJsonSerializer.Deserialize<AudioQuery>(responseText);
                     if (deserializeResult is ISuccessResult<AudioQuery> success)
                     {
                         return UncertainResults.Succeed(success.Result);
                     }
                     else if (deserializeResult is IFailureResult<AudioQuery> failure)
                     {
-                        return UncertainResults.Fail<AudioQuery>(
+                        return UncertainResults.FailWithTrace<AudioQuery>(
                             $"Failed to deserialize response to {nameof(AudioQuery)} because -> {failure.Message}.");
                     }
                     else
@@ -110,13 +111,13 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
                 else if (responseMessage.StatusCode is HttpStatusCode.TooManyRequests
                          || (int)responseMessage.StatusCode is >= 500 and <= 599)
                 {
-                    return UncertainResults.Retry<AudioQuery>(
+                    return UncertainResults.RetryWithTrace<AudioQuery>(
                         $"Retryable because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode} with response -> {responseText}.");
                 }
                 // Response error
                 else
                 {
-                    return UncertainResults.Fail<AudioQuery>(
+                    return UncertainResults.FailWithTrace<AudioQuery>(
                         $"Failed because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode} with response -> {responseText}."
                     );
                 }
@@ -124,26 +125,26 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
             // Request error
             catch (HttpRequestException exception)
             {
-                return UncertainResults.Retry<AudioQuery>(
+                return UncertainResults.RetryWithTrace<AudioQuery>(
                     $"Retryable because {nameof(HttpRequestException)} was thrown during calling the API -> {exception}.");
             }
             // Task cancellation
             catch (TaskCanceledException exception)
                 when (exception.CancellationToken == cancellationToken)
             {
-                return UncertainResults.Retry<AudioQuery>(
+                return UncertainResults.RetryWithTrace<AudioQuery>(
                     $"Failed because task was canceled by user during call to the API -> {exception}.");
             }
             // Operation cancellation 
             catch (OperationCanceledException exception)
             {
-                return UncertainResults.Retry<AudioQuery>(
+                return UncertainResults.RetryWithTrace<AudioQuery>(
                     $"Retryable because operation was cancelled during calling the API -> {exception}.");
             }
             // Unhandled error
             catch (Exception exception)
             {
-                return UncertainResults.Fail<AudioQuery>(
+                return UncertainResults.FailWithTrace<AudioQuery>(
                     $"Failed because an unhandled exception was thrown when calling the API -> {exception}.");
             }
         }
@@ -168,13 +169,13 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
         {
             if (string.IsNullOrEmpty(text))
             {
-                return UncertainResults.Fail<AudioQuery>(
+                return UncertainResults.FailWithTrace<AudioQuery>(
                     "Failed because text is null or empty.");
             }
 
             if (cancellationToken.IsCancellationRequested)
             {
-                return UncertainResults.Retry<AudioQuery>(
+                return UncertainResults.RetryWithTrace<AudioQuery>(
                     "Retryable because cancellation has been already requested.");
             }
             
@@ -203,7 +204,7 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
                 using var responseMessage = await httpClient.SendAsync(requestMessage, cancellationToken);
                 if (responseMessage == null)
                 {
-                    return UncertainResults.Fail<AudioQuery>(
+                    return UncertainResults.FailWithTrace<AudioQuery>(
                         $"Failed because{nameof(HttpResponseMessage)} is null.");
                 }
                 
@@ -211,21 +212,21 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
                 var responseText = await responseMessage.Content.ReadAsStringAsync();
                 if (string.IsNullOrEmpty(responseText))
                 {
-                    return UncertainResults.Fail<AudioQuery>(
+                    return UncertainResults.FailWithTrace<AudioQuery>(
                         $"Failed because response string is null or empty.");
                 }
 
                 // Succeeded
                 if (responseMessage.StatusCode == HttpStatusCode.OK)
                 {
-                    var deserializeResult = JsonSerializer.Deserialize<AudioQuery>(responseText);
+                    var deserializeResult = RelentJsonSerializer.Deserialize<AudioQuery>(responseText);
                     if (deserializeResult is ISuccessResult<AudioQuery> success)
                     {
                         return UncertainResults.Succeed(success.Result);
                     }
                     else if (deserializeResult is IFailureResult<AudioQuery> failure)
                     {
-                        return UncertainResults.Fail<AudioQuery>(
+                        return UncertainResults.FailWithTrace<AudioQuery>(
                             $"Failed to deserialize response to {nameof(AudioQuery)} because -> {failure.Message}.");
                     }
                     else
@@ -237,13 +238,13 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
                 else if (responseMessage.StatusCode is HttpStatusCode.TooManyRequests
                          || (int)responseMessage.StatusCode is >= 500 and <= 599)
                 {
-                    return UncertainResults.Retry<AudioQuery>(
+                    return UncertainResults.RetryWithTrace<AudioQuery>(
                         $"Retryable because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode} with response -> {responseText}.");
                 }
                 // Response error
                 else
                 {
-                    return UncertainResults.Fail<AudioQuery>(
+                    return UncertainResults.FailWithTrace<AudioQuery>(
                         $"Failed because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode} with response -> {responseText}."
                     );
                 }
@@ -251,26 +252,26 @@ namespace Mochineko.VOICEVOX_API.QueryCreation
             // Request error
             catch (HttpRequestException exception)
             {
-                return UncertainResults.Retry<AudioQuery>(
+                return UncertainResults.RetryWithTrace<AudioQuery>(
                     $"Retryable because {nameof(HttpRequestException)} was thrown during calling the API -> {exception}.");
             }
             // Task cancellation
             catch (TaskCanceledException exception)
                 when (exception.CancellationToken == cancellationToken)
             {
-                return UncertainResults.Retry<AudioQuery>(
+                return UncertainResults.RetryWithTrace<AudioQuery>(
                     $"Failed because task was canceled by user during call to the API -> {exception}.");
             }
             // Operation cancellation 
             catch (OperationCanceledException exception)
             {
-                return UncertainResults.Retry<AudioQuery>(
+                return UncertainResults.RetryWithTrace<AudioQuery>(
                     $"Retryable because operation was cancelled during calling the API -> {exception}.");
             }
             // Unhandled error
             catch (Exception exception)
             {
-                return UncertainResults.Fail<AudioQuery>(
+                return UncertainResults.FailWithTrace<AudioQuery>(
                     $"Failed because an unhandled exception was thrown when calling the API -> {exception}.");
             }
         }

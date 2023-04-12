@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using Mochineko.Relent.Extensions.NewtonsoftJson;
 using Mochineko.Relent.Result;
 using Mochineko.Relent.UncertainResult;
 using Mochineko.VOICEVOX_API.QueryCreation;
@@ -45,7 +46,7 @@ namespace Mochineko.VOICEVOX_API.Synthesis
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return UncertainResults.Retry<Stream>(
+                return UncertainResults.RetryWithTrace<Stream>(
                     "Retryable because cancellation has been already requested.");
             }
             
@@ -69,14 +70,14 @@ namespace Mochineko.VOICEVOX_API.Synthesis
                       + "?" + queryPath;
 
             string audioQueryJson;
-            var serializeResult = JsonSerializer.Serialize(audioQuery);
+            var serializeResult = RelentJsonSerializer.Serialize(audioQuery);
             if (serializeResult is ISuccessResult<string> serializeSuccess)
             {
                 audioQueryJson = serializeSuccess.Result;
             }
             else if (serializeResult is IFailureResult<string> serializeFailure)
             {
-                return UncertainResults.Fail<Stream>(
+                return UncertainResults.FailWithTrace<Stream>(
                     $"Failed to serialize {nameof(AudioQuery)} because -> {serializeFailure.Message}");
             }
             else
@@ -111,7 +112,7 @@ namespace Mochineko.VOICEVOX_API.Synthesis
                     }
                     else
                     {
-                        return UncertainResults.Fail<Stream>(
+                        return UncertainResults.FailWithTrace<Stream>(
                             $"Failed because response stream is null.");
                     }
                 }
@@ -120,14 +121,14 @@ namespace Mochineko.VOICEVOX_API.Synthesis
                          || (int)responseMessage.StatusCode is >= 500 and <= 599)
                 {
                     var responseText = await responseMessage.Content.ReadAsStringAsync();
-                    return UncertainResults.Retry<Stream>(
+                    return UncertainResults.RetryWithTrace<Stream>(
                         $"Retryable because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode} with response -> {responseText}.");
                 }
                 // Response error
                 else
                 {
                     var responseText = await responseMessage.Content.ReadAsStringAsync();
-                    return UncertainResults.Fail<Stream>(
+                    return UncertainResults.FailWithTrace<Stream>(
                         $"Failed because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode} with response -> {responseText}."
                     );
                 }
@@ -135,26 +136,26 @@ namespace Mochineko.VOICEVOX_API.Synthesis
             // Request error
             catch (HttpRequestException exception)
             {
-                return UncertainResults.Retry<Stream>(
+                return UncertainResults.RetryWithTrace<Stream>(
                     $"Retryable because {nameof(HttpRequestException)} was thrown during calling the API -> {exception}.");
             }
             // Task cancellation
             catch (TaskCanceledException exception)
                 when (exception.CancellationToken == cancellationToken)
             {
-                return UncertainResults.Retry<Stream>(
+                return UncertainResults.RetryWithTrace<Stream>(
                     $"Failed because task was canceled by user during call to the API -> {exception}.");
             }
             // Operation cancellation 
             catch (OperationCanceledException exception)
             {
-                return UncertainResults.Retry<Stream>(
+                return UncertainResults.RetryWithTrace<Stream>(
                     $"Retryable because operation was cancelled during calling the API -> {exception}.");
             }
             // Unhandled error
             catch (Exception exception)
             {
-                return UncertainResults.Fail<Stream>(
+                return UncertainResults.FailWithTrace<Stream>(
                     $"Failed because an unhandled exception was thrown when calling the API -> {exception}.");
             }
         }
@@ -179,7 +180,7 @@ namespace Mochineko.VOICEVOX_API.Synthesis
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return UncertainResults.Retry<Stream>(
+                return UncertainResults.RetryWithTrace<Stream>(
                     "Retryable because cancellation has been already requested.");
             }
             
@@ -199,14 +200,14 @@ namespace Mochineko.VOICEVOX_API.Synthesis
                       + "?" + queryPath;
 
             string audioQueryJson;
-            var serializeResult = JsonSerializer.Serialize(audioQuery);
+            var serializeResult = RelentJsonSerializer.Serialize(audioQuery);
             if (serializeResult is ISuccessResult<string> serializeSuccess)
             {
                 audioQueryJson = serializeSuccess.Result;
             }
             else if (serializeResult is IFailureResult<string> serializeFailure)
             {
-                return UncertainResults.Fail<Stream>(
+                return UncertainResults.FailWithTrace<Stream>(
                     $"Failed to serialize {nameof(AudioQuery)} because -> {serializeFailure.Message}");
             }
             else
@@ -241,7 +242,7 @@ namespace Mochineko.VOICEVOX_API.Synthesis
                     }
                     else
                     {
-                        return UncertainResults.Fail<Stream>(
+                        return UncertainResults.FailWithTrace<Stream>(
                             $"Failed because response stream is null.");
                     }
                 }
@@ -250,14 +251,14 @@ namespace Mochineko.VOICEVOX_API.Synthesis
                          || (int)responseMessage.StatusCode is >= 500 and <= 599)
                 {
                     var responseText = await responseMessage.Content.ReadAsStringAsync();
-                    return UncertainResults.Retry<Stream>(
+                    return UncertainResults.RetryWithTrace<Stream>(
                         $"Retryable because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode} with response -> {responseText}.");
                 }
                 // Response error
                 else
                 {
                     var responseText = await responseMessage.Content.ReadAsStringAsync();
-                    return UncertainResults.Fail<Stream>(
+                    return UncertainResults.FailWithTrace<Stream>(
                         $"Failed because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode} with response -> {responseText}."
                     );
                 }
@@ -265,26 +266,26 @@ namespace Mochineko.VOICEVOX_API.Synthesis
             // Request error
             catch (HttpRequestException exception)
             {
-                return UncertainResults.Retry<Stream>(
+                return UncertainResults.RetryWithTrace<Stream>(
                     $"Retryable because {nameof(HttpRequestException)} was thrown during calling the API -> {exception}.");
             }
             // Task cancellation
             catch (TaskCanceledException exception)
                 when (exception.CancellationToken == cancellationToken)
             {
-                return UncertainResults.Retry<Stream>(
+                return UncertainResults.RetryWithTrace<Stream>(
                     $"Failed because task was canceled by user during call to the API -> {exception}.");
             }
             // Operation cancellation 
             catch (OperationCanceledException exception)
             {
-                return UncertainResults.Retry<Stream>(
+                return UncertainResults.RetryWithTrace<Stream>(
                     $"Retryable because operation was cancelled during calling the API -> {exception}.");
             }
             // Unhandled error
             catch (Exception exception)
             {
-                return UncertainResults.Fail<Stream>(
+                return UncertainResults.FailWithTrace<Stream>(
                     $"Failed because an unhandled exception was thrown when calling the API -> {exception}.");
             }
         }

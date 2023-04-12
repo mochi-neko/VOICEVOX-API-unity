@@ -45,7 +45,7 @@ namespace Mochineko.VOICEVOX_API.Synthesis
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return UncertainResultFactory.Retry<Stream>(
+                return UncertainResults.Retry<Stream>(
                     "Retryable because cancellation has been already requested.");
             }
             
@@ -76,7 +76,7 @@ namespace Mochineko.VOICEVOX_API.Synthesis
             }
             else if (serializeResult is IFailureResult<string> serializeFailure)
             {
-                return UncertainResultFactory.Fail<Stream>(
+                return UncertainResults.Fail<Stream>(
                     $"Failed to serialize {nameof(AudioQuery)} because -> {serializeFailure.Message}");
             }
             else
@@ -107,11 +107,11 @@ namespace Mochineko.VOICEVOX_API.Synthesis
                     var responseStream = await responseMessage.Content.ReadAsStreamAsync();
                     if (responseStream != null)
                     {
-                        return UncertainResultFactory.Succeed(responseStream);
+                        return UncertainResults.Succeed(responseStream);
                     }
                     else
                     {
-                        return UncertainResultFactory.Fail<Stream>(
+                        return UncertainResults.Fail<Stream>(
                             $"Failed because response stream is null.");
                     }
                 }
@@ -120,14 +120,14 @@ namespace Mochineko.VOICEVOX_API.Synthesis
                          || (int)responseMessage.StatusCode is >= 500 and <= 599)
                 {
                     var responseText = await responseMessage.Content.ReadAsStringAsync();
-                    return UncertainResultFactory.Retry<Stream>(
+                    return UncertainResults.Retry<Stream>(
                         $"Retryable because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode} with response -> {responseText}.");
                 }
                 // Response error
                 else
                 {
                     var responseText = await responseMessage.Content.ReadAsStringAsync();
-                    return UncertainResultFactory.Fail<Stream>(
+                    return UncertainResults.Fail<Stream>(
                         $"Failed because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode} with response -> {responseText}."
                     );
                 }
@@ -135,26 +135,26 @@ namespace Mochineko.VOICEVOX_API.Synthesis
             // Request error
             catch (HttpRequestException exception)
             {
-                return UncertainResultFactory.Retry<Stream>(
+                return UncertainResults.Retry<Stream>(
                     $"Retryable because {nameof(HttpRequestException)} was thrown during calling the API -> {exception}.");
             }
             // Task cancellation
             catch (TaskCanceledException exception)
                 when (exception.CancellationToken == cancellationToken)
             {
-                return UncertainResultFactory.Retry<Stream>(
+                return UncertainResults.Retry<Stream>(
                     $"Failed because task was canceled by user during call to the API -> {exception}.");
             }
             // Operation cancellation 
             catch (OperationCanceledException exception)
             {
-                return UncertainResultFactory.Retry<Stream>(
+                return UncertainResults.Retry<Stream>(
                     $"Retryable because operation was cancelled during calling the API -> {exception}.");
             }
             // Unhandled error
             catch (Exception exception)
             {
-                return UncertainResultFactory.Fail<Stream>(
+                return UncertainResults.Fail<Stream>(
                     $"Failed because an unhandled exception was thrown when calling the API -> {exception}.");
             }
         }
@@ -179,7 +179,7 @@ namespace Mochineko.VOICEVOX_API.Synthesis
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return UncertainResultFactory.Retry<Stream>(
+                return UncertainResults.Retry<Stream>(
                     "Retryable because cancellation has been already requested.");
             }
             
@@ -206,7 +206,7 @@ namespace Mochineko.VOICEVOX_API.Synthesis
             }
             else if (serializeResult is IFailureResult<string> serializeFailure)
             {
-                return UncertainResultFactory.Fail<Stream>(
+                return UncertainResults.Fail<Stream>(
                     $"Failed to serialize {nameof(AudioQuery)} because -> {serializeFailure.Message}");
             }
             else
@@ -237,11 +237,11 @@ namespace Mochineko.VOICEVOX_API.Synthesis
                     var responseStream = await responseMessage.Content.ReadAsStreamAsync();
                     if (responseStream != null)
                     {
-                        return UncertainResultFactory.Succeed(responseStream);
+                        return UncertainResults.Succeed(responseStream);
                     }
                     else
                     {
-                        return UncertainResultFactory.Fail<Stream>(
+                        return UncertainResults.Fail<Stream>(
                             $"Failed because response stream is null.");
                     }
                 }
@@ -250,14 +250,14 @@ namespace Mochineko.VOICEVOX_API.Synthesis
                          || (int)responseMessage.StatusCode is >= 500 and <= 599)
                 {
                     var responseText = await responseMessage.Content.ReadAsStringAsync();
-                    return UncertainResultFactory.Retry<Stream>(
+                    return UncertainResults.Retry<Stream>(
                         $"Retryable because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode} with response -> {responseText}.");
                 }
                 // Response error
                 else
                 {
                     var responseText = await responseMessage.Content.ReadAsStringAsync();
-                    return UncertainResultFactory.Fail<Stream>(
+                    return UncertainResults.Fail<Stream>(
                         $"Failed because the API returned status code:({(int)responseMessage.StatusCode}){responseMessage.StatusCode} with response -> {responseText}."
                     );
                 }
@@ -265,26 +265,26 @@ namespace Mochineko.VOICEVOX_API.Synthesis
             // Request error
             catch (HttpRequestException exception)
             {
-                return UncertainResultFactory.Retry<Stream>(
+                return UncertainResults.Retry<Stream>(
                     $"Retryable because {nameof(HttpRequestException)} was thrown during calling the API -> {exception}.");
             }
             // Task cancellation
             catch (TaskCanceledException exception)
                 when (exception.CancellationToken == cancellationToken)
             {
-                return UncertainResultFactory.Retry<Stream>(
+                return UncertainResults.Retry<Stream>(
                     $"Failed because task was canceled by user during call to the API -> {exception}.");
             }
             // Operation cancellation 
             catch (OperationCanceledException exception)
             {
-                return UncertainResultFactory.Retry<Stream>(
+                return UncertainResults.Retry<Stream>(
                     $"Retryable because operation was cancelled during calling the API -> {exception}.");
             }
             // Unhandled error
             catch (Exception exception)
             {
-                return UncertainResultFactory.Fail<Stream>(
+                return UncertainResults.Fail<Stream>(
                     $"Failed because an unhandled exception was thrown when calling the API -> {exception}.");
             }
         }

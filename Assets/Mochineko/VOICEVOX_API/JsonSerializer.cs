@@ -20,22 +20,22 @@ namespace Mochineko.VOICEVOX_API
 
                 if (!string.IsNullOrEmpty(json))
                 {
-                    return ResultFactory.Succeed(json);
+                    return Results.Succeed(json);
                 }
                 else
                 {
-                    return ResultFactory.Fail<string>(
+                    return Results.Fail<string>(
                         $"Failed to serialize because serialized JSON of {typeof(T)} was null or empty.");
                 }
             }
             catch (JsonSerializationException exception)
             {
-                return ResultFactory.Fail<string>(
+                return Results.Fail<string>(
                     $"Failed to serialize {typeof(T)} to JSON because -> {exception}");
             }
             catch (Exception exception)
             {
-                return ResultFactory.Fail<string>(
+                return Results.Fail<string>(
                     $"Failed to serialize {typeof(T)} to JSON because unhandled exception -> {exception}");
             }
         }
@@ -48,27 +48,27 @@ namespace Mochineko.VOICEVOX_API
 
                 if (requestBody != null)
                 {
-                    return ResultFactory.Succeed(requestBody);
+                    return Results.Succeed(requestBody);
                 }
                 else
                 {
-                    return ResultFactory.Fail<T>(
+                    return Results.Fail<T>(
                         $"Failed to deserialize because deserialized object of {typeof(T)} was null.");
                 }
             }
             catch (JsonSerializationException exception)
             {
-                return ResultFactory.Fail<T>(
+                return Results.Fail<T>(
                     $"Failed to deserialize {typeof(T)} from JSON because -> {exception}");
             }
             catch (JsonReaderException exception)
             {
-                return ResultFactory.Fail<T>(
+                return Results.Fail<T>(
                     $"Failed to deserialize {typeof(T)} from JSON because -> {exception}");
             }
             catch (Exception exception)
             {
-                return ResultFactory.Fail<T>(
+                return Results.Fail<T>(
                     $"Failed to deserialize {typeof(T)} from JSON because unhandled exception -> {exception}");
             }
         }
